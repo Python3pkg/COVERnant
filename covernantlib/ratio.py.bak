@@ -89,10 +89,10 @@ class CoverageRatioCalculator(object):
              self._numerator_bam_file)
 
     def print_no_aligned_bases(self):
-        print(("Number of mapped bases in numerator sample total: %s" %
-              self.no_of_mapped_bases_numerator))
-        print(("Number of used bases in denominator sample - "
-              "total: %s" % self.no_of_mapped_bases_denominator))        
+        print("Number of mapped bases in numerator sample total: %s" %
+              self.no_of_mapped_bases_numerator)
+        print("Number of used bases in denominator sample - "
+              "total: %s" % self.no_of_mapped_bases_denominator)        
 
     def calc_normalization_factors(self):
         """Calculate the normalization factor based on the number of aligned
@@ -108,12 +108,12 @@ class CoverageRatioCalculator(object):
                 self.no_of_mapped_bases_numerator)
             self._denominator_normalization_factor = 1000000000.0/float(
                 self.no_of_mapped_bases_denominator)
-            print(("CPB factor numerator: %s (1B/%s)" % (
+            print("CPB factor numerator: %s (1B/%s)" % (
                 self._numerator_normalization_factor,
-                self.no_of_mapped_bases_numerator)))
-            print(("CPB factor denominator: %s (1B/%s)" % (
+                self.no_of_mapped_bases_numerator))
+            print("CPB factor denominator: %s (1B/%s)" % (
                 self._denominator_normalization_factor,
-                self.no_of_mapped_bases_denominator)))
+                self.no_of_mapped_bases_denominator))
         # In case one or both factors are set:
         else:
             if self._numerator_factor_given is None:
@@ -123,10 +123,10 @@ class CoverageRatioCalculator(object):
             self._numerator_normalization_factor = self._numerator_factor_given
             self._denominator_normalization_factor = (
                 self._denominator_factor_given)
-            print(("Factor numerator: %s (manually set)" % (
-                self._numerator_normalization_factor)))
-            print(("Factor denominator: %s (manually set)" % (
-                self._denominator_normalization_factor)))
+            print("Factor numerator: %s (manually set)" % (
+                self._numerator_normalization_factor))
+            print("Factor denominator: %s (manually set)" % (
+                self._denominator_normalization_factor))
 
     def normalize_coverages(self):
         self.coverage_denominator_normalized = (
@@ -156,7 +156,7 @@ class CoverageRatioCalculator(object):
 
     def _normalize_coverages(self, coverages, factor):
         normalized_coverages = {}
-        for element, element_coverages in list(coverages.items()):
+        for element, element_coverages in coverages.items():
             normalized_coverages[element] = element_coverages * factor
         return normalized_coverages
             
@@ -171,7 +171,7 @@ class CoverageRatioCalculator(object):
             self._ratio_name = "{}_vs_{}".format(
                 self._file_name_to_name(self._denominator_bam_file),
                 self._file_name_to_name(self._numerator_bam_file))
-        print((self._denominator_name, self._numerator_name, self._ratio_name))
+        print(self._denominator_name, self._numerator_name, self._ratio_name)
 
     def _file_name_to_name(self, file_name):
         name = file_name.split("/")[-1].replace(".bam", "")
@@ -211,7 +211,7 @@ class CoverageRatioCalculator(object):
         averaged_coverages = {}
         if self._window_size is None:
             self._window_size = 1
-        for element, element_coverages in list(coverages.items()):
+        for element, element_coverages in coverages.items():
             averaged_coverages[element] = self._sliding_windows_average(
                 element_coverages)
         return averaged_coverages
@@ -249,7 +249,9 @@ class CoverageRatioCalculator(object):
             # As the values between the nucleotides selected by the
             # step size are zero only the selected nucleotides will be
             # returned due to this filter.
-            for pos, coverage in [pos_and_cov for pos_and_cov in enumerate(coverages) if pos_and_cov[1] != 0.0]:
+            for pos, coverage in filter(
+                lambda pos_and_cov: pos_and_cov[1] != 0.0,
+                    enumerate(coverages)):
                 yield (pos, coverage)
         else:
             # Here the step size has to be used explicitly to return
@@ -261,19 +263,19 @@ class CoverageRatioCalculator(object):
 
     def calc_coverage_ratio(self):
         self.elements_and_coverage_ratios = {}
-        for element in list(self.coverage_denominator_normalized.keys()):
+        for element in self.coverage_denominator_normalized.keys():
             self.elements_and_coverage_ratios[
                 element] = self._compare_coverages(
                     element, self.coverage_denominator_normalized,
                     self.coverage_numerator_normalized)
         self.elements_and_coverage_ratios_forward = {}
-        for element in list(self.coverage_denominator_forward_normalized.keys()):
+        for element in self.coverage_denominator_forward_normalized.keys():
             self.elements_and_coverage_ratios_forward[
                 element] = self._compare_coverages(
                     element, self.coverage_denominator_forward_normalized,
                 self.coverage_numerator_forward_normalized)
         self.elements_and_coverage_ratios_reverse = {}
-        for element in list(self.coverage_denominator_reverse_normalized.keys()):
+        for element in self.coverage_denominator_reverse_normalized.keys():
             self.elements_and_coverage_ratios_reverse[
                 element] = self._compare_coverages(
                     element, self.coverage_denominator_reverse_normalized,
@@ -323,11 +325,11 @@ class CoverageRatioCalculator(object):
 
     def _print_file_names(self):
         print("Performing ChIP-Seq analysis")
-        print(("- Input file with numerator data: %s" %
-              self._numerator_bam_file))
-        print(("- Input file with denominator data: %s" %
-              self._denominator_bam_file))
-        print(("- Output file prefix: %s" % self._output_prefix))
+        print("- Input file with numerator data: %s" %
+              self._numerator_bam_file)
+        print("- Input file with denominator data: %s" %
+              self._denominator_bam_file)
+        print("- Output file prefix: %s" % self._output_prefix)
 
     def _sliding_windows_average(self, coverages):
         averaged_coverages = np.zeros(len(coverages))

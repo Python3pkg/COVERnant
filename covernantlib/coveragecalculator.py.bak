@@ -64,7 +64,7 @@ class CoverageCalculator(object):
                 read_pairs_by_qname.setdefault(
                     alignment.qname, [None, None])
                 read_pairs_by_qname[alignment.qname][index] = alignment
-        for pair in list(read_pairs_by_qname.values()):
+        for pair in read_pairs_by_qname.values():
             # TO FIX - raises Segementation fault:
             # if None in pair:
             #    continue

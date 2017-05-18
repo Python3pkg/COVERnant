@@ -151,10 +151,11 @@ class CoverageExtractor(object):
         for column_name in list(self._coverage_df.columns)[4:]:
             column = self._coverage_df[column_name]
             column_without_zeros = np.array(list(
-                [cov for cov in column if cov != 0.0]))
+                filter(lambda cov: cov != 0.0, column)))
             column_without_na = np.array(list(
-                [cov for cov in column if not math.isnan(cov)]))
-            column_without_zeros_and_na = np.array(list([cov for cov in column if not (math.isnan(cov) or cov == 0.0)]))
+                filter(lambda cov: not math.isnan(cov), column)))
+            column_without_zeros_and_na = np.array(list(filter(
+                lambda cov: not (math.isnan(cov) or cov == 0.0), column)))
             average_df[column_name] = [
                 column.median(),
                 column.mean(),

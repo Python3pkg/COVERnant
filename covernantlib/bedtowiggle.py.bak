@@ -13,7 +13,7 @@ def _generate_coverage_for_strand(strand, input_file, output_prefix,
                                   window_size, step_size):
     replicons_and_coverages = init_coverage_dict(input_file)
     entries = pybedtools.BedTool(input_file)
-    for replicon, coverages in list(replicons_and_coverages.items()):
+    for replicon, coverages in replicons_and_coverages.items():
         for window_center in range(
                 int(window_size/2),
                 len(coverages)-int(window_size/2), step_size):
@@ -51,6 +51,6 @@ def init_coverage_dict(input_file):
         if entry.end > replicons_and_max_end_pos[entry.chrom]:
             replicons_and_max_end_pos[entry.chrom] = entry.end
     replicons_and_coverages = {}
-    for replicon, end_pos in list(replicons_and_max_end_pos.items()):
+    for replicon, end_pos in replicons_and_max_end_pos.items():
         replicons_and_coverages[replicon] = np.zeros(end_pos)
     return replicons_and_coverages

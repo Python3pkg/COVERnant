@@ -73,7 +73,8 @@ class WiggleWriter(object):
             self._fh.write(
                 "\n".join(["%s %s" % (pos, coverage * factor)
                            for pos, coverage in
-                           [pos_and_cov for pos_and_cov in pos_value_pairs if pos_and_cov[1] != 0.0]]) + "\n")
+                           filter(lambda pos_and_cov: pos_and_cov[1] != 0.0,
+                                  pos_value_pairs)]) + "\n")
 
     def close_file(self):
         self._fh.close()
